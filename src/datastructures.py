@@ -46,6 +46,7 @@ class FamilyStructure:
          if member['id'] != id:
             new_members.append(member)
         self._members = new_members
+        print("estos son los miembros", self._members)
 
     def get_member(self, id):
         for member in self._members:

@@ -41,32 +41,37 @@ def create_member():
     age = request.json.get("age")
     lucky_numbers = request.json.get("lucky_numbers")
     
-    member = {
+    """member = {
         "first_name": first_name,
         "age": age,
         "lucky_numbers": lucky_numbers,
         "last_name": jackson_family.last_name, 
         "id": jackson_family._generateId()
-    }
+    }"""
+    member = request.get_json()
 
     jackson_family.add_member(member)
 
     return jsonify(member), 200
 
-@app.route('/member/<int:id>', methods=["GET","DELETE"])
-def get_delete_member_by_id(id):
+@app.route('/member/<int:id>', methods=["GET"])
+def get_member_by_id(id):
     member = jackson_family.get_member(id)
     if member:
         if request.method == 'GET':
             return jsonify(member), 200
 
-        elif request.method == 'DELETE':
-            jackson_family.delete_member(id)
-            return jsonify({'done': True}), 200
-
     else:
         return jsonify({"error": "Member not found"}), 404
+    
+@app.route('/member/<int:id>', methods=["DELETE"])
+def delete_member_by_id(id):
+    jackson_family.delete_member(id)
+    return jsonify({'done': True}), 200
+    
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
     app.run(host='0.0.0.0', port=PORT, debug=True)
+
